@@ -165,14 +165,7 @@ class Graph {
     }
 
     init() {
-        // for (let i = 0; i < this.sqrtSize; i++) {
-        //     for (let j = 0; j < this.sqrtSize; j++) {
-        //         this.vertexData.push([i, j]);
-        //     }
-        // }
-        for (let i = 0; i < this.size; i++) {
-            this.vertexData.push(i);
-        }
+        return this.vertexData = Array.from({ length: 64}, (_, i) => i);
     }
 
     getLegalMoves(node) {
