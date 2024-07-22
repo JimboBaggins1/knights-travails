@@ -213,11 +213,57 @@ class Graph {
     }
 
 
+    levelOrderSearch(start, end) {
+        let queue = [];
+        let previous = [];
+        let visited = Array(this.size).fill(false);
 
+        // convert coords to nums
+        let startNode = this.convertFromCoords(start);
+        let endNode = this.convertFromCoords(end);
+        
+        // input validity checks
+        if (startNode === endNode) {
+            console.log('Start square same as end square - please enter two different squares.');
+            return;
+        }
+        if (startNode < 0 || startNode > 63 || endNode < 0 || endNode > 63) {
+            console.log(`Invalid coordinates.`);
+            return;
+        }
 
+        // traverse graph
+        visited[startNode] = true;
+        queue.push(startNode);
+        console.log(visited)
+        console.log(queue)
+        while (queue.length !== 0) {
+            const currentNode = queue.shift();
+            if (currentNode === endNode) break;
+            let neighbours = this.getNeighbours(currentNode);
+            neighbours.forEach(node => {
+                if (!visited[node]) {
+                    visited[node] = true;
+                    queue.push(node);
+                    previous[node] = currentNode;
+                }
+            })
+        }
 
-
-
+        // reconstruct path
+        let outputPath = [];
+        outputPath.push(this.convertToCoords(endNode));
+        let nextStep = previous[endNode];
+        while (nextStep !== startNode) {
+            outputPath.push(this.convertToCoords(nextStep));
+            nextStep = previous[nextStep];
+        }
+        outputPath.push(this.convertToCoords(startNode));
+        const outputReversed = outputPath.reverse();
+        const result = outputReversed.map(value => `[${value}]`).join(" -> ")
+        console.log('You made it in ', outputPath.length - 1, ' steps.\nPath: ', result);
+        return result;
+    }
     addNode(node) {
         this.adjacencyList.set(node, new Set());
     }
